@@ -1,7 +1,7 @@
 import { Grid } from '@mui/material';
 import HeaderUI from './components/HeaderUI';
 import AlertUI from './components/AlertUI';
-
+import SelectorUI from './components/SelectorUI';
 import './App.css'
 
 function App() {
@@ -18,7 +18,7 @@ function App() {
          <Grid size={12}>Elemento: Alertas<AlertUI description="No se preveen lluvias"/></Grid>
 
          {/* Selector */}
-         <Grid size={12}>Elemento: Selector</Grid>
+         <Grid size={12}>Elemento: Selector<SelectorUI/></Grid>
 
          {/* Indicadores */}
          <Grid size={12}>Elemento: Indicadores</Grid>
