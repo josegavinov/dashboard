@@ -4,6 +4,8 @@ import AlertUI from './components/AlertUI';
 import SelectorUI from './components/SelectorUI';
 import IndicatorUI from './components/IndicatorUI';
 import useFetchData from './functions/useFetchData';
+import TableUI from './components/TableUI';
+import ChartUI from './components/ChartUI';
 import './App.css'
 
 function App() {
@@ -61,14 +63,14 @@ function App() {
                         />
                     )}
                  </Grid>
-
+            
              </Grid>
          {/* Gráfico */}
          <Grid sx={{ display: { xs: "none", md: "block"} }} >Elemento: Gráfico</Grid>
-
+            <ChartUI />
          {/* Tabla */}
          <Grid sx={{ display: { xs: "none", md: "block" } }}>Elemento: Tabla</Grid>
-
+            <TableUI />
          {/* Información adicional */}
          <Grid>Elemento: Información adicional</Grid>
 
