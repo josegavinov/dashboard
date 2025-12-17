@@ -7,10 +7,11 @@ import useFetchData from './functions/useFetchData';
 import TableUI from './components/TableUI';
 import ChartUI from './components/ChartUI';
 import './App.css'
+import { useState } from 'react';
 
 function App() {
     const dataFetcherOutput = useFetchData();
-
+    const [selectedOption, setSelectedOption] = useState<string | null>(null);
   return (
       <Grid container spacing={5} justifyContent="center" alignItems="center">
 
@@ -22,7 +23,7 @@ function App() {
          <Grid size={12}>Elemento: Alertas<AlertUI description="No se preveen lluvias"/></Grid>
 
          {/* Selector */}
-         <Grid size={12}>Elemento: Selector<SelectorUI/></Grid>
+         <Grid size={12}>Elemento: Selector<SelectorUI onOptionSelect={setSelectedOption} /></Grid>
 
          {/* Indicadores */}
 <Grid container size={{ xs: 12, md: 9 }} >
