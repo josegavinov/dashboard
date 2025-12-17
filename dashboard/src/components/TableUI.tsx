@@ -1,64 +1,66 @@
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import { DataGrid, type GridColDef } from '@mui/x-data-grid';
+import useFetchData from '../functions/useFetchData';
 
-function combineArrays(arrLabels: Array<string>, arrValues1: Array<number>, arrValues2: Array<number>) {
-   return arrLabels.map((label, index) => ({
-      id: index,
-      label: label,
-      value1: arrValues1[index],
-      value2: arrValues2[index]
-   }));
-}
-
+// 1. CORREGIR ESTA DEFINICIÓN DE COLUMNAS
 const columns: GridColDef[] = [
    { field: 'id', headerName: 'ID', width: 90 },
    {
-      field: 'label',
-      headerName: 'Label',
-      width: 125,
+      field: 'time', // Antes era 'label', ahora debe coincidir con el dato
+      headerName: 'Hora',
+      width: 150,
    },
    {
-      field: 'value1',
-      headerName: 'Value 1',
-      width: 125,
+      field: 'temperature', // Antes era 'value1'
+      headerName: 'Temperatura (°C)',
+      width: 150,
    },
    {
-      field: 'value2',
-      headerName: 'Value 2',
-      width: 125,
+      field: 'windSpeed', // Antes era 'value2'
+      headerName: 'Viento (km/h)',
+      width: 150,
    },
    {
       field: 'resumen',
       headerName: 'Resumen',
-      description: 'No es posible ordenar u ocultar esta columna.',
+      description: 'Resumen de condiciones',
       sortable: false,
-      hideable: false,
-      width: 100,
-      valueGetter: (_, row) => `${row.label || ''} ${row.value1 || ''} ${row.value2 || ''}`,
+      width: 250,
+      // Actualizamos el valueGetter para usar los nuevos campos
+      valueGetter: (_, row) => 
+         `${row.time}: ${row.temperature}°C / ${row.windSpeed}km/h`,
    },
 ];
 
-const arrValues1 = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const arrValues2 = [2400, 1398, 9800, 3908, 4800, 3800, 4300];
-const arrLabels = ['A','B','C','D','E','F','G'];
-
 export default function TableUI() {
+   const weatherData = useFetchData();
 
-   const rows = combineArrays(arrLabels, arrValues1, arrValues2);
+   // Si no hay datos, mostramos mensaje de carga
+   if (!weatherData) return <Typography>Cargando datos...</Typography>;
+
+   // 2. ASEGURAR QUE LAS FILAS TENGAN LAS MISMAS CLAVES QUE LAS COLUMNAS
+   const rows = weatherData.hourly.time.map((time, index) => ({
+      id: index,
+      // Estas claves (time, temperature, windSpeed) deben coincidir con 'field' arriba
+      time: new Date(time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      temperature: weatherData.hourly.temperature_2m[index],
+      windSpeed: weatherData.hourly.wind_speed_10m[index]
+   }));
 
    return (
-      <Box sx={{ height: 350, width: '100%' }}>
+      <Box sx={{ height: 400, width: '100%' }}>
          <DataGrid
             rows={rows}
-            columns={columns}
+            columns={columns} // Aquí se pasa la nueva definición
             initialState={{
                pagination: {
                   paginationModel: {
-                     pageSize: 5,
+                     pageSize: 10,
                   },
                },
             }}
-            pageSizeOptions={[5]}
+            pageSizeOptions={[5, 10]}
             disableRowSelectionOnClick
          />
       </Box>
